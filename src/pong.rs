@@ -10,11 +10,11 @@ use amethyst::renderer::{
     Camera, Projection,
 };
 
-const ARENA_HEIGHT: f32 = 100.0;
-const ARENA_WIDTH: f32 = 100.0;
+pub const ARENA_HEIGHT: f32 = 100.0;
+pub const ARENA_WIDTH: f32 = 100.0;
 
-const PADDLE_HEIGHT: f32 = 16.0;
-const PADDLE_WIDTH: f32 = 4.0;
+pub const PADDLE_HEIGHT: f32 = 16.0;
+pub const PADDLE_WIDTH: f32 = 4.0;
 
 pub struct Pong;
 
@@ -66,60 +66,60 @@ fn initialise_camera(world: &mut World) {
         .build();
 }
 
-enum Side {
-  Left,
-  Right,
+pub enum Side {
+    Left,
+    Right,
 }
 
-struct Paddle {
-  pub side: Side,
-  pub width: f32,
-  pub heigh: f32,
+pub struct Paddle {
+    pub side: Side,
+    pub width: f32,
+    pub heigh: f32,
 }
 
 impl Paddle {
-  fn new(side: Side) -> Paddle {
-    Paddle {
-      side,
-      width: 1.0,
-      heigh: 1.0,
+    fn new(side: Side) -> Paddle {
+        Paddle {
+        side,
+        width: 1.0,
+        heigh: 1.0,
+        }
     }
-  }
 }
 
 impl Component for Paddle {
-  type Storage = DenseVecStorage<Self>;
+    type Storage = DenseVecStorage<Self>;
 }
 
 const SPRITESHEET_SIZE: (f32, f32) = (8.0, 16.0);
 
 fn initialise_paddles(world: &mut World, spritesheet: TextureHandle) {
-  let sprite = Sprite {
-    left: 0.0,
-    right: PADDLE_WIDTH,
-    top: 0.0,
-    bottom: PADDLE_HEIGHT,
-  };
-  let mut left_transform = Transform::default();
-  let mut right_transform = Transform::default();
+    let sprite = Sprite {
+        left: 0.0,
+        right: PADDLE_WIDTH,
+        top: 0.0,
+        bottom: PADDLE_HEIGHT,
+    };
+    let mut left_transform = Transform::default();
+    let mut right_transform = Transform::default();
 
-  let y = ARENA_HEIGHT / 2.0;
-  left_transform.translation = Vector3::new(PADDLE_WIDTH * 0.5, y, 0.0);
-  right_transform.translation = Vector3::new(ARENA_WIDTH - PADDLE_WIDTH * 0.5, y, 0.0);
+    let y = ARENA_HEIGHT / 2.0;
+    left_transform.translation = Vector3::new(PADDLE_WIDTH * 0.5, y, 0.0);
+    right_transform.translation = Vector3::new(ARENA_WIDTH - PADDLE_WIDTH * 0.5, y, 0.0);
 
-  world.create_entity()
-    .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
-    .expect("Failed to add sprite render on left paddle")
-    .with(Paddle::new(Side::Left))
-    .with(GlobalTransform::default())
-    .with(left_transform)
-    .build();
+    world.create_entity()
+        .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+        .expect("Failed to add sprite render on left paddle")
+        .with(Paddle::new(Side::Left))
+        .with(GlobalTransform::default())
+        .with(left_transform)
+        .build();
 
-  world.create_entity()
-    .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
-    .expect("Failed to add sprite render on right paddle")
-    .with(Paddle::new(Side::Right))
-    .with(GlobalTransform::default())
-    .with(right_transform)
-    .build();
+    world.create_entity()
+        .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+        .expect("Failed to add sprite render on right paddle")
+        .with(Paddle::new(Side::Right))
+        .with(GlobalTransform::default())
+        .with(right_transform)
+        .build();
 }
